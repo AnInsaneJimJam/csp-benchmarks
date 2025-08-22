@@ -1,0 +1,11 @@
+name: "Install Nargo"
+description: "Installs the noir-lang toolchain"
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+        source ~/.bashrc
+        ~/.nargo/bin/noirup --version
