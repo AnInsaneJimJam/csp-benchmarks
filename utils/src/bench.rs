@@ -1,5 +1,5 @@
 use human_repr::{HumanCount, HumanDuration};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_with::{DurationNanoSeconds, serde_as};
 use std::{
     fmt::Display,
@@ -61,8 +61,12 @@ pub fn measure_peak_memory<R, F: FnOnce() -> R>(func: F) -> (R, usize) {
 }
 
 #[serde_as]
-#[derive(Serialize, Tabled)]
+#[derive(Serialize, Deserialize, Tabled, Clone)]
 pub struct Metrics {
+    pub name: String,
+    pub feat: String,
+    pub is_zkvm: bool,
+    pub target: String,
     #[tabled(display_with = "display_bytes")]
     pub input_size: usize,
     #[serde_as(as = "DurationNanoSeconds")]
@@ -75,6 +79,8 @@ pub struct Metrics {
     pub cycles: u64,
     #[tabled(display_with = "display_bytes")]
     pub proof_size: usize,
+    #[tabled(display_with = "display_bytes")]
+    pub preprocessing_size: usize,
     #[tabled(display_with = "display_bytes")]
     pub peak_memory: usize,
 }
@@ -92,13 +98,18 @@ fn display_duration(duration: &Duration) -> String {
 }
 
 impl Metrics {
-    pub fn new(size: usize) -> Self {
+    pub fn new(name: String, feat: String, is_zkvm: bool, target: String, size: usize) -> Self {
         Metrics {
+            name,
+            feat,
+            is_zkvm,
+            target,
             input_size: size,
             proof_duration: Duration::default(),
             verify_duration: Duration::default(),
             cycles: 0,
             proof_size: 0,
+            preprocessing_size: 0,
             peak_memory: 0,
         }
     }
@@ -136,43 +147,7 @@ pub fn write_csv(out_path: &str, results: &[Metrics]) {
     println!("{table}");
 }
 
-#[serde_as]
-#[derive(Serialize, Tabled, Clone, Copy)]
-pub struct SubMetrics {
-    #[tabled(display_with = "display_bytes")]
-    pub input_size: usize,
-    #[tabled(display_with = "display_bytes")]
-    pub proof_size: usize,
-    #[tabled(display_with = "display_bytes")]
-    pub proving_peak_memory: usize, // NOTE: This should be removed when `SP1` benchmarks are refactored to use `ere`.
-    #[tabled(display_with = "display_bytes")]
-    pub preprocessing_size: usize,
-    #[tabled(display_with = "display_bytes")]
-    pub preprocessing_peak_memory: usize, // NOTE: This should be removed when `SP1` benchmarks are refactored to use `ere`.
-}
-
-impl SubMetrics {
-    pub fn new(size: usize) -> Self {
-        SubMetrics {
-            input_size: size,
-            proof_size: 0,
-            proving_peak_memory: 0,
-            preprocessing_size: 0,
-            preprocessing_peak_memory: 0,
-        }
-    }
-}
-
-pub fn display_submetrics(metrics: &[SubMetrics]) -> String {
-    if metrics.is_empty() {
-        return String::new();
-    }
-    let mut table = Table::new(metrics);
-    table.with(Style::modern());
-    table.to_string()
-}
-
-pub fn write_json_submetrics(output_path: &str, metrics: &SubMetrics) {
+pub fn write_json_metrics(output_path: &str, metrics: &Metrics) {
     let json = serde_json::to_string_pretty(metrics).unwrap();
     std::fs::write(output_path, json).unwrap();
 }
