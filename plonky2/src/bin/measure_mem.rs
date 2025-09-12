@@ -1,8 +1,15 @@
-use plonky2_sha256::bench::{prove, sha256_prepare};
-use utils::metadata::SHA2_INPUTS;
+use utils::{
+    bench::{compile_binary, run_measure_mem_script},
+    metadata::SHA2_INPUTS,
+};
 
 fn main() {
-    // TODO: variable input size
-    let (data, pw) = sha256_prepare(SHA2_INPUTS[0]);
-    let _proof = prove(&data.prover_data(), pw);
+    let sha256_binary_name = "sha256_no_lookup_mem";
+    for input_size in SHA2_INPUTS {
+        compile_binary(sha256_binary_name);
+
+        let sha256_binary_path = format!("../target/release/{}", sha256_binary_name);
+        let json_file = format!("sha256_{}_plonky2_no_lookup_mem_report.json", input_size);
+        run_measure_mem_script(&json_file, &sha256_binary_path, input_size);
+    }
 }
