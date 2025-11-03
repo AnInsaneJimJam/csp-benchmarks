@@ -78,7 +78,6 @@ pub struct BenchHarnessConfig<'a> {
     pub target: BenchTarget,
     pub system: ProvingSystem,
     pub feature: Option<&'a str>,
-    pub fixed_input_size: Option<usize>,
     pub mem_binary_name: &'a str,
 }
 
@@ -206,7 +205,7 @@ fn mem_report_filename(target: &str, size: usize, system: &str, feat: Option<&st
     }
 }
 
-fn input_sizes_for(target: BenchTarget, _fixed: Option<usize>) -> Vec<usize> {
+fn input_sizes_for(target: BenchTarget) -> Vec<usize> {
     match target {
         BenchTarget::Sha256 => selected_sha2_inputs(),
         BenchTarget::Ecdsa => vec![32],
@@ -247,7 +246,7 @@ pub fn run_benchmarks_fn<
     let target_str = cfg.target.as_str();
     let system_str = cfg.system.as_str();
 
-    for size in input_sizes_for(cfg.target, cfg.fixed_input_size) {
+    for size in input_sizes_for(cfg.target) {
         let prepared_context = prepare(size);
 
         let mut metrics = init_metrics(&cfg, target_str, system_str, size, &properties);
@@ -333,7 +332,7 @@ pub fn run_benchmarks_with_state_fn<
     let target_str = cfg.target.as_str();
     let system_str = cfg.system.as_str();
 
-    for size in input_sizes_for(cfg.target, cfg.fixed_input_size) {
+    for size in input_sizes_for(cfg.target) {
         let prepared_context = prepare(size, shared);
 
         let mut metrics = init_metrics(&cfg, target_str, system_str, size, &properties);
@@ -443,7 +442,6 @@ macro_rules! __define_benchmark_harness {
                 system,
                 feature: $feature,
                 mem_binary_name: $mem_binary_name,
-                fixed_input_size: None,
             };
             ::utils::harness::run_benchmarks_with_state_fn(
                 c,
@@ -473,7 +471,6 @@ macro_rules! __define_benchmark_harness {
                 system,
                 feature: $feature,
                 mem_binary_name: $mem_binary_name,
-                fixed_input_size: None,
             };
             ::utils::harness::run_benchmarks_fn(
                 c,
@@ -502,7 +499,6 @@ macro_rules! __define_benchmark_harness {
                 system,
                 feature: $feature,
                 mem_binary_name: $mem_binary_name,
-                fixed_input_size: None,
             };
             ::utils::harness::run_benchmarks_with_state_fn(
                 c,
@@ -532,7 +528,6 @@ macro_rules! __define_benchmark_harness {
                 system,
                 feature: $feature,
                 mem_binary_name: $mem_binary_name,
-                fixed_input_size: None,
             };
             ::utils::harness::run_benchmarks_fn(
                 c,
