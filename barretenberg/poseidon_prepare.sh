@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 WORKSPACE_ROOT_PATH="${SCRIPT_DIR}/circuits"
 
 # Update circuit to use INPUT_SIZE
-CIRCUIT_SOURCE="${WORKSPACE_ROOT_PATH}/hash/poseidon2/src/main.nr"
+CIRCUIT_SOURCE="${WORKSPACE_ROOT_PATH}/hash/poseidon/src/main.nr"
 if [[ -f "$CIRCUIT_SOURCE" ]]; then
   # Replace hash_N function name and array size
   sed -E -i.bak \
@@ -26,8 +26,8 @@ cd "$WORKSPACE_ROOT_PATH"
 nargo compile --workspace --silence-warnings --skip-brillig-constraints-check
 cd ../..
 
-CIRCUIT_PATH="${WORKSPACE_ROOT_PATH}/target/poseidon2.json"
-CIRCUIT_MEMBER_DIR="${WORKSPACE_ROOT_PATH}/hash/poseidon2"
+CIRCUIT_PATH="${WORKSPACE_ROOT_PATH}/target/poseidon.json"
+CIRCUIT_MEMBER_DIR="${WORKSPACE_ROOT_PATH}/hash/poseidon"
 TOML_PATH="${CIRCUIT_MEMBER_DIR}/Prover_${INPUT_SIZE}.toml"
 
 GEN="$("$UTILS_BIN" poseidon -n ${INPUT_SIZE})"
@@ -53,5 +53,5 @@ jq -nc \
   --arg circuit "$CIRCUIT_PATH" \
   --arg toml "$TOML_PATH" \
   --argjson len "$INPUT_SIZE" \
-  --arg bench "poseidon2" \
+  --arg bench "poseidon" \
   "$JQ_PROG" > "$STATE_JSON"
