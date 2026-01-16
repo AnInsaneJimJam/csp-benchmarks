@@ -1,4 +1,4 @@
-use circom::{prepare, prove};
+use circom::sha256::{prepare, prove};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
