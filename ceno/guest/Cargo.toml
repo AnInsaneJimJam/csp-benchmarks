@@ -1,0 +1,15 @@
+[package]
+name = "ceno-guest"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ceno_rt = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+ceno_keccak = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+ceno_sha2 = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+alloy-primitives = { version = "1.3", features = ["native-keccak"] }
+
+[features]
+profiling = []
+
+[workspace]

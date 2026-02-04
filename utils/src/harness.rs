@@ -55,6 +55,7 @@ pub enum ProvingSystem {
     Sp1,
     Jolt,
     Miden,
+    Ceno,
     CairoM,
     Nexus,
     // Extend as needed
@@ -73,6 +74,7 @@ impl ProvingSystem {
             ProvingSystem::Sp1 => "sp1",
             ProvingSystem::Jolt => "jolt",
             ProvingSystem::Miden => "miden",
+            ProvingSystem::Ceno => "ceno",
             ProvingSystem::CairoM => "cairo-m",
             ProvingSystem::Nexus => "nexus",
         }
@@ -452,9 +454,35 @@ fn measure_ram(
     size: usize,
 ) {
     compile_binary(mem_bin_name_ref);
-    let bin_path = format!("../target/release/{}", mem_bin_name_ref);
+    let bin_path = resolve_mem_bin_path(mem_bin_name_ref);
     let mem_json = mem_report_filename(target_str, size, system_str, cfg.feature);
     run_measure_mem_script(&mem_json, &bin_path, size);
+}
+
+fn resolve_mem_bin_path(mem_bin_name_ref: &str) -> String {
+    use std::path::PathBuf;
+
+    if let Ok(target_dir) = std::env::var("CARGO_TARGET_DIR") {
+        return PathBuf::from(target_dir)
+            .join("release")
+            .join(mem_bin_name_ref)
+            .to_string_lossy()
+            .to_string();
+    }
+
+    let from_workspace = PathBuf::from("..")
+        .join("target")
+        .join("release")
+        .join(mem_bin_name_ref);
+    if from_workspace.exists() {
+        return from_workspace.to_string_lossy().to_string();
+    }
+
+    PathBuf::from("target")
+        .join("release")
+        .join(mem_bin_name_ref)
+        .to_string_lossy()
+        .to_string()
 }
 
 #[macro_export]

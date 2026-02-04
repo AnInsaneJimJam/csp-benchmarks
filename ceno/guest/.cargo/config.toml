@@ -1,0 +1,33 @@
+[unstable]
+build-std = [
+  "alloc",
+  "core",
+  "compiler_builtins",
+  "std",
+  "panic_abort",
+  "proc_macro",
+]
+build-std-features = [
+  "compiler-builtins-mem",
+  "default",
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
+[build]
+rustflags = [
+  "-C",
+  "link-arg=-Tmemory.x",
+  "-C",
+  "link-arg=-Tceno_link.x",
+  "-Zlocation-detail=none",
+  "-C",
+  "passes=lower-atomic",
+  "--cfg",
+  "getrandom_backend=\"custom\"",
+]
+target = "riscv32im-ceno-zkvm-elf.json"

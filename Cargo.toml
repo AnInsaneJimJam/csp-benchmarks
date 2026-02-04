@@ -14,8 +14,9 @@ members = [
     "utils",
 ]
 exclude = [
-    "cairo-m",
-    "nexus"
+    "cairo-m", "nexus",
+    "ceno",
+    "ceno-examples-stub",
 ]
 
 [workspace.dependencies]

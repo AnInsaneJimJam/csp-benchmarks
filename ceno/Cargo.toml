@@ -1,0 +1,48 @@
+[package]
+name = "ceno"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+criterion = "0.5.1"
+clap = { version = "4.5.20", features = ["derive", "env"] }
+utils = { path = "../utils" }
+bincode = "1.3.3"
+
+# Ceno (git)
+ceno_emul = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+ceno_host = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+ceno_zkvm = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+gkr_iop = { git = "https://github.com/scroll-tech/ceno.git", rev = "3f5214f" }
+ff_ext = { git = "https://github.com/scroll-tech/gkr-backend.git", package = "ff_ext", tag = "v1.0.0-alpha.21" }
+mpcs = { git = "https://github.com/scroll-tech/gkr-backend.git", package = "mpcs", tag = "v1.0.0-alpha.21" }
+
+[patch."https://github.com/scroll-tech/ceno.git"]
+ceno-examples = { path = "../ceno-examples-stub" }
+
+[build-dependencies]
+glob = "0.3"
+
+[[bench]]
+name = "keccak_ceno_keccak"
+harness = false
+
+[[bench]]
+name = "keccak_alloy_keccak"
+harness = false
+
+[[bench]]
+name = "sha256"
+harness = false
+
+[[bin]]
+name = "keccak_mem_ceno_keccak"
+path = "src/bin/keccak_mem_ceno_keccak.rs"
+
+[[bin]]
+name = "keccak_mem_alloy_keccak"
+path = "src/bin/keccak_mem_alloy_keccak.rs"
+
+[[bin]]
+name = "sha256_mem_ceno"
+path = "src/bin/sha256_mem_ceno.rs"
