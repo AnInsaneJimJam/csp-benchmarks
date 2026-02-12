@@ -27,3 +27,5 @@ tmp/
 *.sym
 *.wtns
 *.ptau
+.claude
+.codex
