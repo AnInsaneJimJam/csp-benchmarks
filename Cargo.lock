@@ -6668,6 +6668,7 @@ dependencies = [
  "criterion",
  "ere-miden",
  "ere-zkvm-interface",
+ "k256",
  "utils 0.1.0",
 ]
 
