@@ -41,7 +41,7 @@ where
 
     pub fn set_witness(&self, bits: Vec<bool>, pw: &mut PartialWitness<F>) {
         for i in 0..64 {
-            pw.set_bool_target(self.bits[i], bits[i]);
+            let _ = pw.set_bool_target(self.bits[i], bits[i]);
         }
     }
 

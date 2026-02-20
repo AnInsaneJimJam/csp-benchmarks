@@ -81,8 +81,6 @@ pub fn poseidon_prepare(input_size: usize) -> (CircuitData<F, C, D>, PartialWitn
     (builder.build::<C>(), pw, n_gates)
 }
 
-
-
 pub fn keccak256_prepare(input_size: usize) -> (CircuitData<F, C, D>, PartialWitness<F>, usize) {
     let (msg, hash) = utils::generate_keccak_input(input_size);
 

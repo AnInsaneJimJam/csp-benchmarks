@@ -2,7 +2,7 @@ use plonky2::{plonk::config::PoseidonGoldilocksConfig, util::serialization::Writ
 use plonky2_circuits::PLONKY2_BENCH_PROPERTIES;
 use plonky2_circuits::bench::{keccak256_prepare, prove, verify};
 use plonky2_u32::gates::arithmetic_u32::{U32GateSerializer, U32GeneratorSerializer};
-use utils::harness::{BenchTarget, ProvingSystem};
+use utils::harness::ProvingSystem;
 
 const D: usize = 2;
 type C = PoseidonGoldilocksConfig;
