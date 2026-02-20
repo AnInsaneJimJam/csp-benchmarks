@@ -9613,6 +9613,7 @@ dependencies = [
  "plonky2_u32",
  "rand 0.8.5",
  "sha2",
+ "tiny-keccak",
  "utils 0.1.0",
 ]
 
