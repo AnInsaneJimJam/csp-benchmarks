@@ -9600,6 +9600,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "plonky2_circuits"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "criterion",
+ "env_logger 0.10.2",
+ "itertools 0.13.0",
+ "log",
+ "plonky2",
+ "plonky2_u32",
+ "rand 0.8.5",
+ "sha2",
+ "utils 0.1.0",
+]
+
+[[package]]
 name = "plonky2_field"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9622,23 +9639,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e1e554181dc95243b8d9948ae7bae5759c7fb2502fed28f671f95ef38079406"
 dependencies = [
  "rayon",
-]
-
-[[package]]
-name = "plonky2_sha256"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "criterion",
- "env_logger 0.10.2",
- "itertools 0.13.0",
- "log",
- "plonky2",
- "plonky2_u32",
- "rand 0.8.5",
- "sha2",
- "utils 0.1.0",
 ]
 
 [[package]]
