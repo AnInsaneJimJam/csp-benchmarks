@@ -209,3 +209,15 @@ where
     }
     z
 }
+
+pub fn array_to_bits_lsb(bytes: &[u8]) -> Vec<bool> {
+    let mut ret = Vec::new();
+    for byte in bytes {
+        let mut n = *byte;
+        for _ in 0..8 {
+            ret.push((n & 1) == 1);
+            n >>= 1;
+        }
+    }
+    ret
+}
