@@ -1,5 +1,5 @@
 use clap::Parser;
-use plonky2_sha256::bench::{prove, sha256_prepare};
+use plonky2_circuits::bench::{prove, sha256_prepare};
 
 #[derive(Parser, Debug)]
 struct Args {

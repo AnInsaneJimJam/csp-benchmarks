@@ -404,7 +404,7 @@ mod tests {
     use plonky2_u32::gates::arithmetic_u32::{U32GateSerializer, U32GeneratorSerializer};
     use rand::Rng;
 
-    use crate::circuit::{array_to_bits, make_circuits};
+    use crate::sha256::circuit::{array_to_bits, make_circuits};
 
     const EXPECTED_RES: [u8; 256] = [
         0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0,
