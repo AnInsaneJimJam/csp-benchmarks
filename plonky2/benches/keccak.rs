@@ -1,16 +1,16 @@
 use plonky2_circuits::PLONKY2_BENCH_PROPERTIES;
 use plonky2_circuits::bench::{
-    compute_proof_size, compute_u32_preprocessing_size, prove, sha256_prepare, verify_proof,
+    compute_proof_size, compute_u32_preprocessing_size, keccak256_prepare, prove, verify_proof,
 };
 use utils::harness::ProvingSystem;
 
 utils::define_benchmark_harness!(
-    BenchTarget::Sha256,
+    BenchTarget::Keccak,
     ProvingSystem::Plonky2,
     None,
-    "sha256_mem",
+    "keccak_mem",
     PLONKY2_BENCH_PROPERTIES,
-    sha256_prepare,
+    keccak256_prepare,
     |(_, _, n_gates)| *n_gates,
     |(circuit_data, pw, _)| { prove(circuit_data, pw.clone()) },
     verify_proof,

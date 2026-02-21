@@ -1,5 +1,5 @@
 use clap::Parser;
-use plonky2_sha256::bench::{prove, sha256_prepare};
+use plonky2_circuits::bench::{keccak256_prepare, prove};
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -11,10 +11,10 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    sha256_no_lookup_mem(args.input_size);
+    keccak_mem(args.input_size);
 }
 
-fn sha256_no_lookup_mem(input_size: usize) {
-    let (data, pw, _) = sha256_prepare(input_size);
+fn keccak_mem(input_size: usize) {
+    let (data, pw, _) = keccak256_prepare(input_size);
     let _proof = prove(&data, pw);
 }
