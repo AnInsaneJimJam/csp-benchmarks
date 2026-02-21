@@ -11,10 +11,10 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    sha256_no_lookup_mem(args.input_size);
+    sha256_mem(args.input_size);
 }
 
-fn sha256_no_lookup_mem(input_size: usize) {
+fn sha256_mem(input_size: usize) {
     let (data, pw, _) = sha256_prepare(input_size);
     let _proof = prove(&data, pw);
 }

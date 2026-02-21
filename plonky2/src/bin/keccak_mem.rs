@@ -11,10 +11,10 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    keccak_no_lookup_mem(args.input_size);
+    keccak_mem(args.input_size);
 }
 
-fn keccak_no_lookup_mem(input_size: usize) {
+fn keccak_mem(input_size: usize) {
     let (data, pw, _) = keccak256_prepare(input_size);
     let _proof = prove(&data, pw);
 }
