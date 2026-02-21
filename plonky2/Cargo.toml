@@ -32,13 +32,13 @@ name = "keccak"
 harness = false
 
 [[bin]]
-name = "sha256_no_lookup_mem"
-path = "src/bin/sha256_no_lookup_mem.rs"
+name = "sha256_mem"
+path = "src/bin/sha256_mem.rs"
 
 [[bin]]
 name = "poseidon_mem_plonky2"
 path = "src/bin/poseidon_mem.rs"
 
 [[bin]]
-name = "keccak_no_lookup_mem"
-path = "src/bin/keccak_no_lookup_mem.rs"
+name = "keccak_mem"
+path = "src/bin/keccak_mem.rs"

@@ -8,10 +8,12 @@ use plonky2::{
         config::{GenericConfig, PoseidonGoldilocksConfig},
         proof::ProofWithPublicInputs,
     },
+    util::serialization::Write,
 };
 
 use crate::keccak256::circuit::{array_to_bits_lsb, keccak256_circuit};
 use crate::sha256::circuit::{array_to_bits, make_circuits};
+use plonky2_u32::gates::arithmetic_u32::{U32GateSerializer, U32GeneratorSerializer};
 
 const D: usize = 2;
 type C = PoseidonGoldilocksConfig;
@@ -114,4 +116,34 @@ pub fn keccak256_prepare(input_size: usize) -> (CircuitData<F, C, D>, PartialWit
 
     let n_gates = builder.num_gates();
     (builder.build::<C>(), pw, n_gates)
+}
+
+pub fn compute_u32_preprocessing_size(circuit_data: &CircuitData<F, C, D>) -> usize {
+    let gate_serializer = U32GateSerializer;
+    let common_data_size = circuit_data
+        .common
+        .to_bytes(&gate_serializer)
+        .unwrap()
+        .len();
+    let generator_serializer = U32GeneratorSerializer::<C, D>::default();
+    let prover_data_size = circuit_data
+        .prover_only
+        .to_bytes(&generator_serializer, &circuit_data.common)
+        .unwrap()
+        .len();
+    prover_data_size + common_data_size
+}
+
+pub fn verify_proof(
+    (circuit_data, _pw, _): &(CircuitData<F, C, D>, PartialWitness<F>, usize),
+    proof: &ProofWithPublicInputs<GoldilocksField, C, D>,
+) {
+    let verifier_data = circuit_data.verifier_data();
+    verify(&verifier_data, proof.clone());
+}
+
+pub fn compute_proof_size(proof: &ProofWithPublicInputs<GoldilocksField, C, D>) -> usize {
+    let mut buffer = Vec::new();
+    buffer.write_proof(&proof.proof).unwrap();
+    buffer.len()
 }
