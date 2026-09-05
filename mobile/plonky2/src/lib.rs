@@ -11,7 +11,7 @@ use ::plonky2::{
 };
 use mopro_ffi::GenerateProofResult;
 use num_bigint::BigUint;
-use plonky2_sha256::circuit::{array_to_bits, make_circuits};
+use plonky2_circuits::sha256::circuit::{array_to_bits, make_circuits};
 use plonky2_u32::gates::arithmetic_u32::U32GateSerializer;
 use std::str::FromStr;
 use thiserror::Error;

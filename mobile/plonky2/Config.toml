@@ -1,0 +1,20 @@
+build_mode = "release"
+target_adapters = []
+target_platforms = [
+    "ios",
+    "android",
+]
+ios = [
+    "aarch64-apple-ios",
+    "aarch64-apple-ios-sim",
+    "x86_64-apple-ios",
+]
+android = [
+    "aarch64-linux-android",
+    "i686-linux-android",
+    "x86_64-linux-android",
+    "armv7-linux-androideabi",
+]
+auto_update = false
+
+[update]
