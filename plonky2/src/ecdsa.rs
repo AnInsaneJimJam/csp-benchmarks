@@ -1,9 +1,4 @@
 //! Fixed-size secp256k1 ECDSA benchmark circuit.
-//!
-//! The vendored gadget uses incomplete affine additions and compares `r`
-//! directly with the computed x-coordinate instead of reducing x modulo the
-//! scalar order. This benchmark therefore covers the deterministic shared
-//! fixture, not every otherwise-valid secp256k1 signature.
 
 use num::{BigUint, One};
 use plonky2::{
