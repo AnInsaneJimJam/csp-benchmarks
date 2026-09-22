@@ -76,8 +76,6 @@ pub fn prepare(input_size: usize) -> PreparedEcdsa {
     constrain_canonical::<Secp256K1Scalar>(&mut builder, &s_target);
     constrain_nonzero(&mut builder, &r_target);
     constrain_nonzero(&mut builder, &s_target);
-    register_public(&mut builder, &r_target);
-    register_public(&mut builder, &s_target);
     witness.set_biguint_target(&r_target, &BigUint::from_bytes_be(&signature[..32]));
     witness.set_biguint_target(&s_target, &BigUint::from_bytes_be(&signature[32..]));
 
@@ -175,7 +173,7 @@ mod tests {
         let PreparedEcdsa { data, .. } = prepare(32);
         let gates = EcdsaGateSerializer;
         let generators = EcdsaGeneratorSerializer::<C, D>::default();
-        assert_eq!(data.common.num_public_inputs, 40);
+        assert_eq!(data.common.num_public_inputs, 24);
         let bytes = data.to_bytes(&gates, &generators).unwrap();
         drop(data);
         let restored =

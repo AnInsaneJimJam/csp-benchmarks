@@ -1,11 +1,5 @@
 # Plonky2 benchmarks
 
-This crate benchmarks Plonky2 1.1 circuits through the repository's shared
-benchmark harness. The circuits use the Goldilocks field, Plonkish
-arithmetization, and FRI for both the IOP and PCS. The benchmark metadata
-reports 97 security bits, post-quantum soundness, zero-knowledge mode, and an
-audited but unmaintained proving system.
-
 The SHA-256 circuit is derived from
 [polymerdao/plonky2-sha256](https://github.com/polymerdao/plonky2-sha256).
 The ECDSA circuit uses the pinned
@@ -27,7 +21,7 @@ The first build may need network access to fetch the pinned Git dependencies.
 
 ## Benchmarking
 
-Run all four targets with the reduced profile while iterating:
+Run all targets with the reduced profile while iterating:
 
 ```bash
 BENCH_INPUT_PROFILE=reduced cargo bench -p plonky2_circuits
@@ -42,31 +36,19 @@ BENCH_INPUT_PROFILE=reduced cargo bench -p plonky2_circuits --bench poseidon
 BENCH_INPUT_PROFILE=reduced cargo bench -p plonky2_circuits --bench ecdsa
 ```
 
-Use `BENCH_INPUT_PROFILE=full` for the complete variable-size sweep. The
-shared harness writes the standardized metrics, Criterion reports, and memory
-reports; see [`CONTRIBUTING.md`](../CONTRIBUTING.md) for the workflow and
-output names. 
+Use `BENCH_INPUT_PROFILE=full` for the complete variable-size sweep.
 
 ## Circuit details
 
-- **SHA-256** — accepts byte messages of 128, 256, 512, 1024, or 2048 bytes
-  (the reduced profile uses 128 and 256). The message is a private witness;
-  the expected digest is constrained in the circuit. This is an explicit
-  circuit, so its acceleration metadata is `None`.
-- **Keccak-256** — uses the in-tree bit-level Keccak circuit with the same byte
-  sizes and reduced profile as SHA-256. The message is private and the expected
-  digest is constrained in the circuit. Its acceleration metadata is `None`.
-- **Poseidon** — hashes 2, 4, 8, 12, or 16 private Goldilocks field-element
-  targets (the reduced profile uses 2 and 8). The four-field-element hash
-  output is public. The benchmark records `precompile` acceleration for this
-  built-in Plonky2 Poseidon operation.
+The Poseidon benchmark uses Plonky2's built-in Poseidon operation and records
+`precompile` acceleration rather than treating it as an explicit circuit.
+
 - **secp256k1 ECDSA** — verifies the generated fixed fixture for a 32-byte
   prehash. The public inputs are ordered `digest`, `public_key_x`,
-  `public_key_y`, `r`, and `s`; each 32-byte value is represented by eight
-  little-endian 32-bit limbs. The circuit enables Plonky2's zero-knowledge
-  blinding, so the proof mode is marked ZK. This does not make the fixture's
-  statement private: all of those values are public, and no secret key or
-  private message is supplied.
+  `public_key_y`; each 32-byte value is represented by eight little-endian
+  32-bit limbs. The signature values `r` and `s` are private witness inputs and
+  remain fully constrained by the ECDSA gadget. The circuit enables Plonky2's
+  zero-knowledge blinding, so the proof mode is marked ZK.
 
 The ECDSA gadget uses incomplete affine addition and compares `r` directly
 with the computed x-coordinate instead of reducing that coordinate modulo the
@@ -75,17 +57,3 @@ fixture, not as evidence of a complete production ECDSA verifier.
 
 The in-tree Keccak implementation includes its upstream MIT license at
 [`src/keccak256/MIT-LICENSE.txt`](src/keccak256/MIT-LICENSE.txt).
-
-## Reported metrics
-
-- `num_constraints` — the circuit builder's gate count.
-- `preprocessing_size` — serialized common circuit data plus serialized
-  prover-only data.
-- `proof_size` — the serialized proof core, excluding public inputs.
-- Prove and verify timings, plus peak memory measured by each target's memory
-  binary.
-
-The memory binaries perform only circuit preparation and proving, including
-witness generation. All targets use the shared harness; see
-[`CONTRIBUTING.md`](../CONTRIBUTING.md) for the repository-wide benchmark
-requirements.
